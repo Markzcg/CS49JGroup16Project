@@ -21,7 +21,7 @@ public class AppointmentTest {
     @Test
     public void testBeforeStartDate(){
         // < startDate && < endDate = false;
-        LocalDate checkDate = LocalDate.of(2024, 9, 10);
+        LocalDate checkDate = LocalDate.of(2024, 10, 9);
         boolean actual = appointment.occursOn(checkDate);
         boolean expected = false;
         assertEquals(expected, actual);
