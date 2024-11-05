@@ -1,3 +1,4 @@
+package obj;
 import java.time.LocalDate;
 
 public class DailyAppointment extends Appointment {

@@ -1,4 +1,6 @@
+package obj;
 import java.time.LocalDate;
+import java.util.Objects;
 
 public abstract class Appointment implements Comparable<Appointment> {
     private String description;
