@@ -1,7 +1,6 @@
 import java.time.LocalDate;
 
-public class Appointment {
-
+public abstract class Appointment implements Comparable<Appointment> {
     private String description;
     private LocalDate startDate;
     private LocalDate endDate;
@@ -30,38 +29,32 @@ public class Appointment {
         return endDate;
     }
 
-    public boolean occursOn(LocalDate date) {
-        if (date == null) {
-            throw new IllegalArgumentException("Date cannot be null.");
-        }
-        return (date.isEqual(startDate) || date.isAfter(startDate)) && (date.isEqual(endDate) || date.isBefore(endDate));
+    protected boolean inBetween(LocalDate date) {
+        return (date.isEqual(startDate) || date.isEqual(endDate) || (date.isAfter(startDate) && date.isBefore(endDate)));
+    }
+
+    public abstract boolean occursOn(LocalDate date);
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+        Appointment other = (Appointment) obj;
+        return description.equals(other.description) && startDate.equals(other.startDate) && endDate.equals(other.endDate);
     }
 
     @Override
-    public String toString() {
-        return "Appointment: " + description + ", Start Date: " + startDate + ", End Date: " + endDate;
+    public int hashCode() {
+        return description.hashCode() + startDate.hashCode() + endDate.hashCode();
     }
 
-    public static void main(String[] args) {
-        LocalDate startDate = LocalDate.of(2024, 10, 10);
-        LocalDate endDate = LocalDate.of(2024, 10, 20);
-        Appointment appointment = new Appointment("School Event", startDate, endDate);
-
-        System.out.println(appointment);
-
-        LocalDate testDate = LocalDate.of(2024, 10, 9);
-        System.out.println("Occurs on 2024-10-09: " + appointment.occursOn(testDate));  // false
-
-        testDate = LocalDate.of(2024, 10, 10);
-        System.out.println("Occurs on 2024-10-10: " + appointment.occursOn(testDate));  // true
-
-        testDate = LocalDate.of(2024, 10, 15);
-        System.out.println("Occurs on 2024-10-15: " + appointment.occursOn(testDate));  // true
-
-        testDate = LocalDate.of(2024, 10, 20);
-        System.out.println("Occurs on 2024-10-20: " + appointment.occursOn(testDate));  // true
-
-        testDate = LocalDate.of(2024, 10, 21);
-        System.out.println("Occurs on 2024-10-21: " + appointment.occursOn(testDate));  // false
+    @Override
+    public int compareTo(Appointment other) {
+        int startComparison = this.startDate.compareTo(other.startDate);
+        if (startComparison != 0) return startComparison;
+        int endComparison = this.endDate.compareTo(other.endDate);
+        if (endComparison != 0) return endComparison;
+        return this.description.compareTo(other.description);
     }
 }
+
