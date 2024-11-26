@@ -16,7 +16,7 @@ public class AppointmentManager {
         return list;
     }
 
-    void add(Appointment appointment) {
+    public void add(Appointment appointment) {
         try {
             if (!list.add(appointment)) {
                 throw new IllegalArgumentException("Appointment already exists!");
@@ -26,7 +26,7 @@ public class AppointmentManager {
         }
     }
 
-    void delete(Appointment appointment) {
+    public void delete(Appointment appointment) {
         try {
             if (!list.remove(appointment)) {
                 throw new IllegalArgumentException("Appointment does not exist!");
@@ -36,7 +36,7 @@ public class AppointmentManager {
         }
     }
 
-    void update(Appointment current, Appointment modified) {
+    public void update(Appointment current, Appointment modified) {
         try {
             if (!list.remove(current)) {
                 throw new IllegalArgumentException("Appointment does not exist!");
@@ -54,7 +54,7 @@ public class AppointmentManager {
         }
     }
 
-    Appointment[] getAppointmentsOn(LocalDate date, Comparator<Appointment> order) {
+    public Appointment[] getAppointmentsOn(LocalDate date, Comparator<Appointment> order) {
         PriorityQueue<Appointment> tempList = new PriorityQueue<Appointment>(order);
 
         if (date == null) {
