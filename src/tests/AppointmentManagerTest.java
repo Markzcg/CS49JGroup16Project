@@ -14,7 +14,10 @@ public class AppointmentManagerTest {
     private AppointmentManager appointments;
     private Appointment onetime;
     private Appointment daily;
-    private Appointment weekly;
+    private Appointment monthly;
+    private Appointment onetime2;
+    private Appointment monthly2;
+    private Appointment monthly3;
 
     @Before
     public void setup(){
@@ -22,10 +25,15 @@ public class AppointmentManagerTest {
         LocalDate start1 = LocalDate.of(2024, 10, 15);
         LocalDate end1 = LocalDate.of(2024, 10, 20);
         LocalDate start2 = LocalDate.of(2024, 10, 17);
-        LocalDate end2= LocalDate.of(2024, 11, 5);
+        LocalDate end2= LocalDate.of(2024, 10, 21);
+        LocalDate start3 = LocalDate.of(2024, 10, 31);
+        LocalDate end3 = LocalDate.of(2024, 12, 17);
         onetime = new OnetimeAppointment("testOneTime", start1);
         daily = new DailyAppointment("testDaily", start2, end1);
-        weekly = new MonthlyAppointment("testMonthly", start2, end1);
+        monthly = new MonthlyAppointment("testMonthly", start3, end3);
+        onetime2 = new OnetimeAppointment("testOneTime2", start2);
+        monthly2 = new MonthlyAppointment("TestMonthly2", start1, end2);
+        monthly3 = new MonthlyAppointment("TestMonthly2", start2, end3);
     }
 
     @Rule
@@ -63,34 +71,41 @@ public class AppointmentManagerTest {
     }
 
     @Test
-    public void testGetAppointmentsOnDate(){
-        appointments.add(weekly);
+    public void testGetAppointmentsOnNullDate(){
         appointments.add(daily);
-        LocalDate testDate = LocalDate.of(2024, 10, 17);
+        appointments.add(monthly3);
+        appointments.add(onetime);
+        // Date is null so return all appointments by order of insertion
+        Comparator<Appointment> dateComparator = Comparator.comparing(Appointment::getStartDate);
+        Appointment[] allAppointments= appointments.getAppointmentsOn(null, dateComparator);
+        Appointment[] expected = {onetime, monthly3, daily};
+        assertArrayEquals(expected, allAppointments);
+    }
 
+    @Test
+    public void testGetAppointmentsOnNullComparator(){
+        appointments.add(daily); // 10/17/24 - 10/20/24
+        appointments.add(monthly3); // 10/17/24 - 12/17/24
+        appointments.add(onetime); // 10/15/24
+        appointments.add(onetime2); // 10/17/24
+        LocalDate testDate = LocalDate.of(2024, 10, 17);
+        // expected only dates on 10/17/24 and sorted by natural order
         Appointment[] allAppointments= appointments.getAppointmentsOn(testDate, null);
-        Appointment[] expected = {daily, weekly};
+        Appointment[] expected = {onetime2, monthly3, daily};
         assertArrayEquals(expected, allAppointments);
     }
 
     @Test
-    public void testGetAppointmentsOnComparator(){
-        appointments.add(weekly);
-        appointments.add(daily);
+    public void testGetAppointmentsOn(){
+        appointments.add(daily); // 10/17/24 - 10/20/24
+        appointments.add(monthly3); // 10/17/24 - 12/17/24
+        appointments.add(onetime); // 10/15/24
+        appointments.add(onetime2); // 10/17/24
+        Comparator<Appointment> dateComparator = Comparator.comparing(Appointment::getEndDate);
 
-        Appointment[] allAppointments= appointments.getAppointmentsOn(null, Comparator.comparing(Appointment::getStartDate));
-        Appointment[] expected = {weekly, daily};
-        assertArrayEquals(expected, allAppointments);
-    }
-
-    @Test
-    public void testGetAppointmentsOnBoth(){
-        appointments.add(weekly);
-        appointments.add(daily);
         LocalDate testDate = LocalDate.of(2024, 10, 17);
-
-        Appointment[] allAppointments= appointments.getAppointmentsOn(testDate, Comparator.comparing(Appointment::getStartDate));
-        Appointment[] expected = {weekly, daily};
+        Appointment[] allAppointments= appointments.getAppointmentsOn(testDate, dateComparator);
+        Appointment[] expected = {onetime2, daily, monthly3};
         assertArrayEquals(expected, allAppointments);
     }
 }
