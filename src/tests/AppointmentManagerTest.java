@@ -100,7 +100,7 @@ public class AppointmentManagerTest {
         appointments.add(daily); // 10/17/24 - 10/20/24
         appointments.add(monthly3); // 10/17/24 - 12/17/24
         appointments.add(onetime); // 10/15/24
-        appointments.add(onetime2); // 10/17/24
+        appointments.add(onetime2);
         Comparator<Appointment> dateComparator = Comparator.comparing(Appointment::getEndDate);
 
         LocalDate testDate = LocalDate.of(2024, 10, 17);
