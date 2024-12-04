@@ -82,7 +82,7 @@ public class AppointmentManagerTest {
         Appointment[] expected = {onetime, daily, monthly};
         assertArrayEquals(expected, allAppointments);
     }
-    /*
+
     @Test
     public void testGetAppointmentsOnNullDate(){
         appointments.add(daily);
@@ -119,5 +119,5 @@ public class AppointmentManagerTest {
         Appointment[] allAppointments= appointments.getAppointmentsOn(testDate, dateComparator);
         Appointment[] expected = {daily, monthly3, monthly4, onetime2};
         assertArrayEquals(expected, allAppointments);
-    } */
+    }
 }
