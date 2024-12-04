@@ -64,9 +64,9 @@ public class AppointmentManager {
         }
 
 
-        Appointment[] sortedList = tempList.toArray();
+        //Appointment[] sortedList = tempList.toArray();
 
-        return sortedList;
+        return null;
     }
 
 }
