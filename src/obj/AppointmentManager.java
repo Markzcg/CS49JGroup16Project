@@ -1,6 +1,7 @@
 package obj;
 
 import java.time.LocalDate;
+import java.util.Arrays;
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.PriorityQueue;
@@ -23,6 +24,7 @@ public class AppointmentManager {
             }
         } catch (IllegalArgumentException e1) {
             System.out.println("Error: " + e1.getMessage());
+            throw e1;
         }
     }
 
@@ -33,6 +35,7 @@ public class AppointmentManager {
             }
         } catch (IllegalArgumentException e2) {
             System.out.println("Error: " + e2.getMessage());
+            throw e2;
         }
     }
 
@@ -43,6 +46,7 @@ public class AppointmentManager {
             }
         } catch (IllegalArgumentException e1) {
             System.out.println("Error: " + e1.getMessage());
+            throw e1;
         }
 
         try {
@@ -51,22 +55,35 @@ public class AppointmentManager {
             }
         } catch (IllegalArgumentException e2) {
             System.out.println("Error: " + e2.getMessage());
+            throw e2;
         }
     }
 
     public Appointment[] getAppointmentsOn(LocalDate date, Comparator<Appointment> order) {
+
         PriorityQueue<Appointment> tempList = new PriorityQueue<Appointment>(order);
+        Appointment[] sortedList;
 
         if (date == null) {
             for (Appointment appointment : list) {
                 tempList.offer(appointment);
             }
         }
+        else {
+            for (Appointment appointment : list) {
+                if (date.isEqual(appointment.getStartDate())) {
+                    tempList.offer(appointment);
+                }
+            }
+        }
 
+        sortedList = new Appointment[tempList.size()];
+        tempList.toArray(sortedList);
 
-        //Appointment[] sortedList = tempList.toArray();
+        Arrays.sort(sortedList, order);
 
-        return null;
+        return sortedList;
     }
 
 }
+
