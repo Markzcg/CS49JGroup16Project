@@ -88,8 +88,8 @@ public class AppointmentManagerTest {
         appointments.add(daily);
         appointments.add(monthly3);
         appointments.add(onetime);
-        Comparator<Appointment> endDateComparator = new endDateComparator();
-        Appointment[] allAppointments= appointments.getAppointmentsOn(null, endDateComparator);
+        Comparator<Appointment> endDateComparator = new EndDateComparator();
+        Appointment[] allAppointments= appointments.getAppointmentsOn(null, EndDateComparator);
         Appointment[] expected = {onetime, daily, monthly3};
         assertArrayEquals(expected, allAppointments);
     }
@@ -113,7 +113,7 @@ public class AppointmentManagerTest {
         appointments.add(onetime);
         appointments.add(onetime2);
         appointments.add(monthly4);
-        Comparator<Appointment> dateComparator = new descriptionComparator();
+        Comparator<Appointment> dateComparator = new DescriptionComparator();
 
         LocalDate testDate = LocalDate.of(2024, 10, 17);
         Appointment[] allAppointments= appointments.getAppointmentsOn(testDate, dateComparator);
